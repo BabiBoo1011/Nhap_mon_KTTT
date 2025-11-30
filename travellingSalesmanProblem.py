@@ -1,40 +1,30 @@
 import random
 import math
 
-# -----------------------------------------
-# Tính khoảng cách Euclid giữa hai thành phố
-# -----------------------------------------
+# Tính khoảng cách giữa 2 thành phố
 def distance(a, b):
     return math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
 
-# -----------------------------------------
 # Tính tổng quãng đường của 1 tour
-# -----------------------------------------
 def total_distance(route, cities):
     dist = 0
     for i in range(len(route)):
         dist += distance(cities[route[i]], cities[route[(i+1) % len(route)]])
     return dist
 
-# -----------------------------------------
-# Khởi tạo ngẫu nhiên một cá thể (một hoán vị)
-# -----------------------------------------
+# Khởi tạo quần thể
 def create_individual(n):
     route = list(range(n))
     random.shuffle(route)
     return route
 
-# -----------------------------------------
 # Chọn lọc theo Tournament Selection
-# -----------------------------------------
 def selection(population, fitnesses, k=3):
     selected = random.sample(list(zip(population, fitnesses)), k)
     selected.sort(key=lambda x: x[1])
     return selected[0][0]
 
-# -----------------------------------------
 # Lai ghép PMX (Partially Mapped Crossover)
-# -----------------------------------------
 def pmx_crossover(parent1, parent2):
     size = len(parent1)
     child = [-1] * size
@@ -59,18 +49,14 @@ def pmx_crossover(parent1, parent2):
 
     return child
 
-# -----------------------------------------
 # Đột biến – nhập hoán vị 2 vị trí
-# -----------------------------------------
 def mutate(route, mutation_rate=0.05):
     if random.random() < mutation_rate:
         i, j = random.sample(range(len(route)), 2)
         route[i], route[j] = route[j], route[i]
     return route
 
-# -----------------------------------------
 # GA chính
-# -----------------------------------------
 def genetic_algorithm_tsp(cities, population_size=100, 
                           crossover_rate=0.9, mutation_rate=0.05, 
                           generations=300):
@@ -88,7 +74,7 @@ def genetic_algorithm_tsp(cities, population_size=100,
         best = population[best_idx]
         best_fit = fitnesses[best_idx]
 
-        # In tiến trình (tùy chọn)
+        # In tiến trình 
         if gen % 50 == 0:
             print(f"Gen {gen}, Best distance: {best_fit:.3f}")
 
@@ -116,9 +102,7 @@ def genetic_algorithm_tsp(cities, population_size=100,
 
     return population[best_idx], fitnesses[best_idx]
 
-# -----------------------------------------
-# DEMO CHẠY THỬ
-# -----------------------------------------
+# Demo với tọa độ các thành phố như dưới đây
 if __name__ == "__main__":
     # Tọa độ thành phố (10 thành phố)
     cities = [
